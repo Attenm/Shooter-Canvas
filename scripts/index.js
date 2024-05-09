@@ -10,9 +10,10 @@ const players = [];
 for (let i = 0; i < playersCount; i++) {
     const player = new Player();
     player.init();
-    player.handlerKeyDown();
-    player.handlerKeyUp();
-    player.handlerMouseMove();
+    player.handleKeyDown();
+    player.handleKeyUp();
+    player.handleMouseMove();
+    player.handleMouseClick();
     players.push(player);
 }
 
@@ -25,6 +26,7 @@ const drawAllPlayers = () => {
 const animate = () => {
     canvas.clearRect();
     drawAllPlayers();
+    canvas.updateProjectiles();
     window.requestAnimationFrame(animate);
 }
 

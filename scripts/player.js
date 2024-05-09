@@ -1,4 +1,5 @@
 import canvas from './canvas.js';
+import Projectile from './projectile.js';
 
 class Player {
     constructor(){
@@ -12,6 +13,8 @@ class Player {
         this.centerLeft = null;
         this.centerTop = null;
         this.playerSize = 90;
+        this.rifleX = null;
+        this.rifleY = null;
     }
 
     setPosition(){
@@ -24,11 +27,17 @@ class Player {
         this.centerTop = this.top + this.image.height / 2;
     }
 
+    setRiflePos(){
+        this.rifleX = this.centerLeft;
+        this.rifleY = this.centerTop;
+    }
+
     createImage(){
         this.image = document.createElement('img');
         this.image.setAttribute('src', 'assets/player.png');
         this.setPosition();
         this.setCenterPos();
+        this.setRiflePos();
     }
 
     render(ctx){
@@ -45,6 +54,7 @@ class Player {
         const animate = () => {
             action();
             this.setCenterPos();
+            this.setRiflePos();
             if(!this.isMoving){
                 return
             }
@@ -91,12 +101,20 @@ class Player {
         }
     }
 
-    handlerKeyUp(){
+    shoot(){
+        canvas.projectiles.push(new Projectile(this.centerLeft, this.centerTop, this.angleInRadians));
+    }
+
+    handleKeyUp(){
         document.addEventListener('keyup', ()=>{this.isMoving = false})
     }
 
-    handlerKeyDown(){
+    handleKeyDown(){
         document.addEventListener('keydown', this.changePosition.bind(this));
+    }
+
+    handleMouseClick(){
+        document.addEventListener('click', this.shoot.bind(this));
     }
 
     rotate(mouseX, mouseY){
@@ -105,7 +123,7 @@ class Player {
         this.angleInRadians = Math.atan2(deltaY, deltaX);
     }
 
-    handlerMouseMove(){
+    handleMouseMove(){
         canvas.getElem()
             .addEventListener('mousemove', (e)=>this.rotate(e.offsetX, e.offsetY))
     }

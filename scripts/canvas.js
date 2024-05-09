@@ -2,6 +2,7 @@ class Canvas {
     constructor() {
         this.elem = null;
         this.ctx = null;
+        this.projectiles = [];
     }
 
     createCanvas() {
@@ -9,11 +10,18 @@ class Canvas {
         this.ctx = this.elem.getContext('2d');
     }
 
+    updateProjectiles() {
+        this.projectiles.forEach(projectile => {
+            projectile.update();
+            projectile.draw(this.ctx);
+        })
+    }
+
     getElem() {
         return this.elem;
     }
 
-    handleWindowResize(){
+    handleWindowResize() {
         window.addEventListener('resize', this.resizeCanvas.bind(this));
     }
     
